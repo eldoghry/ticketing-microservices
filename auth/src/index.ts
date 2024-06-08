@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import "express-async-errors";
 import morgan from "morgan";
 import { currentUserRouter } from "./routes/current-user";
 import { signinRouter } from "./routes/signin";
@@ -24,8 +25,6 @@ app.all("*", (req: Request, res: Response) => {
   throw new NotfoundException();
 });
 
-app.use(errorHandler);
-
 async function start() {
   try {
     await mongoose.connect(
@@ -39,6 +38,8 @@ async function start() {
 }
 
 start();
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}!`);

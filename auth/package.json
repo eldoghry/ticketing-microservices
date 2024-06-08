@@ -12,6 +12,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.9",
     "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
     "express-validator": "^7.1.0",
     "mongoose": "^8.4.1",
     "morgan": "^1.10.0",
