@@ -10,5 +10,6 @@ build:
         dockerfile: Dockerfile
 manifests:
   rawYaml:
-    - infra/k8s/auth-depl.yaml
     - infra/k8s/ingress-controller.yaml
+    - infra/k8s/auth-depl.yaml
+    - infra/k8s/auth-mongo-depl.yaml

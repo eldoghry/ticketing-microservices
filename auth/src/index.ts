@@ -6,6 +6,8 @@ import { signoutRouter } from "./routes/signout";
 import { signupRouter } from "./routes/signup";
 import errorHandler from "./middlewares/error-handler";
 import { NotfoundException } from "./errors/notFound-error";
+import { DatabaseConnectionException } from "./errors/database-error";
+import mongoose from "mongoose";
 
 const PORT = 4001;
 const app: Express = express();
@@ -23,6 +25,20 @@ app.all("*", (req: Request, res: Response) => {
 });
 
 app.use(errorHandler);
+
+async function start() {
+  try {
+    await mongoose.connect(
+      "mongodb://ticketing-auth-mongo-cluster-ip-srv:27017/ticketing-auth"
+    );
+    console.log("Connected to database.");
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseConnectionException();
+  }
+}
+
+start();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}!`);
