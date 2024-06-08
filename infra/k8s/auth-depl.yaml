@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment # Pod | Deployment | Service
+metadata:
+  name: auth-depl # name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-auth # match all pods with name auth
+  template:
+    metadata:
+      labels:
+        app: ticketing-auth
+    spec:
+      containers:
+        - name: ticketing-auth
+          image: eldoghry/ticketing-auth:latest # can use specific tag eldoghry/auth:0.0.3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-auth-cluster-ip-srv
+spec:
+  type: ClusterIP # default is ClusterIP [ClusterIP | NodePort | LoadBalancer | ExternalName]
+  selector:
+    app: ticketing-auth
+  ports:
+    - name: ticketing-auth
+      protocol: TCP
+      port: 4001 # node accept request on this port
+      targetPort: 4001 # request will forward to pod on this port
