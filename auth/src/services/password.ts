@@ -12,7 +12,9 @@ export class PasswordService {
     plainPassword: string,
     storedPassword: string
   ): Promise<boolean> {
-    const hash = await PasswordService.toHash(plainPassword);
-    return hash === storedPassword;
+    const [hashed, salt] = storedPassword.split(".");
+    const hash = (await promisify(scrypt)(plainPassword, salt, 32)) as Buffer;
+    const hashPassword = hash.toString("hex");
+    return hashPassword === hashed;
   }
 }
