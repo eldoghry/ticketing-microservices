@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { ValidationException } from "../errors/validation-error";
-import { BadRequestException } from "../errors/badRequest-error";
+import { body } from "express-validator";
 import { User } from "../models/user";
 import JwtToken from "../services/jwt";
+import ValidationMiddleware from "../middlewares/validation";
+import { BadRequestException } from "../errors/badRequest-error";
 
 const router = express.Router();
 
@@ -18,16 +18,13 @@ router.post(
       .isStrongPassword()
       .withMessage("Password must be strong"),
   ],
+  ValidationMiddleware,
   async (req: Request, res: Response) => {
-    // 1) validate payload
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) throw new ValidationException(errors.array());
-
     const { email, password } = req.body;
 
     // 2) check if email already used before
     const user = await User.findOne({ email });
-    // if (user) throw new BadRequestException("Email is already in use");
+    if (user) throw new BadRequestException("Email is already in use");
 
     // 3) hash password & create user
     const result = await User.build({ email, password }).save();

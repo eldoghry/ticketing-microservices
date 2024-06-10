@@ -4,6 +4,7 @@ import { User } from "../models/user";
 import { BadRequestException } from "../errors/badRequest-error";
 import { PasswordService } from "../services/password";
 import JwtToken from "../services/jwt";
+import ValidationMiddleware from "../middlewares/validation";
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.post(
       .trim()
       .isStrongPassword(),
   ],
+  ValidationMiddleware,
   async (req: Request, res: Response) => {
     // 1) verify email
     req.session = null;
