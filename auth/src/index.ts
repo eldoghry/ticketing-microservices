@@ -9,11 +9,25 @@ import errorHandler from "./middlewares/error-handler";
 import { NotfoundException } from "./errors/notFound-error";
 import { DatabaseConnectionException } from "./errors/database-error";
 import mongoose from "mongoose";
+import cookieSession from "cookie-session";
 
 const PORT = 4001;
 const app: Express = express();
 
+app.set("trust proxy", true);
 app.use(express.json());
+app.use(
+  cookieSession({
+    secure: true,
+    signed: false,
+    secret: "cookie-secret",
+  })
+);
+
+if (!process.env.JWT_KEY) {
+  throw new Error("JWT_secret environment variable not set.");
+}
+
 app.use(morgan("dev"));
 
 app.use(currentUserRouter);
