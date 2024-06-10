@@ -15,6 +15,12 @@ spec:
       containers:
         - name: ticketing-auth
           image: eldoghry/ticketing-auth:latest # can use specific tag eldoghry/auth:0.0.3
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service
