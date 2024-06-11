@@ -15,13 +15,13 @@ app.set("trust proxy", true);
 app.use(express.json());
 app.use(
   cookieSession({
-    secure: true,
+    secure: process.env.NODE_ENV !== "test",
     signed: false,
     secret: "cookie-secret",
   })
 );
 
-if (!process.env.JWT_KEY) {
+if (!process.env.JWT_KEY && process.env.NODE_ENV !== "test") {
   throw new Error("JWT_secret environment variable not set.");
 }
 

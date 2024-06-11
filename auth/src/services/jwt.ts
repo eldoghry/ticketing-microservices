@@ -2,15 +2,13 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { BadRequestException } from "../errors/badRequest-error";
 
 export default class JwtToken {
-  private static secret: string = process.env.JWT_KEY!;
-
   static signToken(payload: object) {
-    return jwt.sign(payload, this.secret, { expiresIn: "10s" });
+    return jwt.sign(payload, process.env.JWT_KEY!, { expiresIn: "5m" });
   }
 
   static verifyToken(token: string) {
     try {
-      const data = jwt.verify(token, this.secret);
+      const data = jwt.verify(token, process.env.JWT_KEY!);
       return data;
     } catch (error: any) {
       if (error instanceof TokenExpiredError)
