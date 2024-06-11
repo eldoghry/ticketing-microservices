@@ -1,17 +1,18 @@
 import express, { Request, Response } from "express";
 import { UnauthorizedException } from "../errors/unuthorized-error";
 import JwtToken from "../services/jwt";
+import isAuthenticatedMiddleware from "../middlewares/isAuthenticated";
+import CurrentUserMiddleware from "../middlewares/currentUser";
 
 const router = express.Router();
 
-router.get("/api/users/current", (req: Request, res: Response) => {
-  // extract jwt from user and validate it
-  if (!req.session?.jwt) throw new UnauthorizedException();
-
-  const jwt = req.session?.jwt;
-  const user = JwtToken.verifyToken(jwt);
-
-  res.send(user);
-});
+router.get(
+  "/api/users/current",
+  isAuthenticatedMiddleware,
+  CurrentUserMiddleware,
+  (req: Request, res: Response) => {
+    res.status(200).send({ user: req.currentUser || null });
+  }
+);
 
 export { router as currentUserRouter };
