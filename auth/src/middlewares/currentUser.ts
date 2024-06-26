@@ -20,9 +20,9 @@ const CurrentUserMiddleware = (
   next: NextFunction
 ) => {
   const jwt = req.session?.jwt;
-  const user = JwtToken.verifyToken(jwt) as UserPayload;
-
-  req.currentUser = user;
+  try {
+    req.currentUser = JwtToken.verifyToken(jwt) as UserPayload;
+  } catch (error) {}
 
   next();
 };

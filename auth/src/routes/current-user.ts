@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get(
   "/api/users/current",
-  isAuthenticatedMiddleware,
   CurrentUserMiddleware,
   (req: Request, res: Response) => {
     res.status(200).send({ user: req.currentUser || null });

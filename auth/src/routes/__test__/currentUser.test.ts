@@ -1,5 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
+import { describe, it, expect } from "@jest/globals";
 
 describe("Current test suite", () => {
   const currentUrl = "/api/users/current";
@@ -25,7 +26,8 @@ describe("Current test suite", () => {
     expect(response.body.user.email).toBe(email);
   });
 
-  it("return 401 when token is missing or invalid", async () => {
-    return request(app).get(currentUrl).expect(401);
+  it("return null when token is missing or invalid", async () => {
+    const response = await request(app).get(currentUrl).expect(200);
+    expect(response.body.user).toBeNull();
   });
 });
