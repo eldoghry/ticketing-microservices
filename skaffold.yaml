@@ -8,8 +8,13 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
+    - image: eldoghry/ticketing-front
+      context: front
+      docker:
+        dockerfile: Dockerfile
 manifests:
   rawYaml:
     - infra/k8s/ingress-controller.yaml
     - infra/k8s/auth-depl.yaml
     - infra/k8s/auth-mongo-depl.yaml
+    - infra/k8s/front-depl.yaml

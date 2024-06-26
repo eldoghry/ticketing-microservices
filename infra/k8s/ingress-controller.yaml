@@ -19,3 +19,10 @@ spec:
                 name: ticketing-auth-cluster-ip-srv
                 port:
                   number: 4001
+          - path: /?(.*)
+            pathType: Exact
+            backend:
+              service:
+                name: ticketing-front-cluster-ip-srv
+                port:
+                  number: 3000
