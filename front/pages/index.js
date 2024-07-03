@@ -1,4 +1,5 @@
 import axios from "axios"
+import buildClient from "../api/build-client"
 
 const LandingPage = ({ currentUser }) => {
     console.log('Client Landing Page')
@@ -10,26 +11,9 @@ const LandingPage = ({ currentUser }) => {
 
 LandingPage.getInitialProps = async (context) => {
     console.log('Landing Page')
-    console.log(Object.keys(context))
+    const { data } = await buildClient(context).get('/api/users/current')
+    return { currentUser: data.user }
 
-    if (typeof window === 'undefined') {
-        console.log('Running from server')
-        const { data } = await axios.get('http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/current', {
-            headers: {
-                Host: 'ticketing-app.dev',
-                ...context.req.headers
-            }
-        })
-        console.log(data)
-        return { currentUser: data.user }
-    } else {
-
-        console.log('Running from client')
-        const { data } = await axios.get('https://ticketing-app.dev/api/users/current')
-        console.log(data)
-        return { currentUser: data.user }
-
-    }
 }
 
 export default LandingPage
