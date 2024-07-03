@@ -10,7 +10,7 @@ const useRequest = ({ url, method, body, onSuccess }) => {
             const { data } = await axios[method](url, body);
 
 
-            if (data && onSuccess) { onSuccess(data) }
+            if (onSuccess) { onSuccess(data) }
 
             return data
 
