@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment # Pod | Deployment | Service
+metadata:
+  name: auth-mongo-depl # name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-auth-mongo # match all pods with name auth
+  template:
+    metadata:
+      labels:
+        app: ticketing-auth-mongo
+    spec:
+      containers:
+        - name: ticketing-auth-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-auth-mongo-cluster-ip-srv
+spec:
+  type: ClusterIP # default is ClusterIP [ClusterIP | NodePort | LoadBalancer | ExternalName]
+  selector:
+    app: ticketing-auth-mongo
+  ports:
+    - name: ticketing-auth-mongo
+      protocol: TCP
+      port: 27017 # node accept request on this port
+      targetPort: 27017 # request will forward to pod on this port

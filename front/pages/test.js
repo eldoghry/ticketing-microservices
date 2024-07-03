@@ -1,0 +1,1 @@
+export default () => <h1>test Landing Page!!!</h1>
